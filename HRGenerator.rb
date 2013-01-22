@@ -9,7 +9,7 @@ require 'date'
 require 'csv'
 
 #Globals and constants#######################################################################
-INPUT_FILE="employees.csv" #one name per line (firstname lastname)
+INPUT_FILE="names.dat" #one name per line (firstname lastname)
 OUTPUT_FILE="HR_generated_data.csv"
 @unique_employeeids = [] #initialized.  contains newly created ids in order to manage uniqueness
 @managers = {} #where manager to dept assignments are stored
@@ -132,7 +132,7 @@ end
 #creates email address
 def get_email firstname, lastname
   
-  "#{firstname}.#{lastname}.#{COMPANY_NAME}.com"
+  "#{firstname}.#{lastname}@#{COMPANY_NAME}.com"
 
 end
 
@@ -159,7 +159,7 @@ def get_employeeid firstname,lastname
     employeeid = "#{firstname[0]}#{lastname[0]}#{Kernel.rand(99999)}"
     
     while @unique_employeeids.include? employeeid #check to set if new employeeid hasn't already been assigned to someone
-      employeid = "#{firstname[0]}#{lastname[0]}#{Kernel.rand(99999)}"
+      employeeid = "#{firstname[0]}#{lastname[0]}#{Kernel.rand(99999)}"
     end
     
     @unique_employeeids << employeeid #add accepted id to array of all ids
@@ -167,6 +167,9 @@ def get_employeeid firstname,lastname
   
 end
   
+
+
+
 
 #writes out to new HR record
 def write_data
