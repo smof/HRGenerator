@@ -29,7 +29,7 @@ TITLES={:IT => ["Developer","Analyst","Engineer"], :Finance=>["Administrator","P
 
 def init
   
-  @completed_users << "employeeid, fullname, firstname, lastname, email, department, job_title, manager, start_date"
+  @completed_users << "employeeid,fullname,firstname,lastname,email,department,job_title,manager,start_date"
   
 end
 
@@ -88,7 +88,7 @@ def create_HR_record employee
     end_date = get_end_date #not implemented
     manager = job_title == "Manager" ? "CEO" : @managers[dept.to_sym]
     
-    @completed_users << "#{employeeid}, #{fullname}, #{firstname}, #{lastname}, #{email}, #{dept}, #{job_title}, #{manager}, #{start_date}"
+    @completed_users << "#{employeeid},#{fullname},#{firstname},#{lastname},#{email},#{dept},#{job_title},#{manager},#{start_date}"
    
     STDERR.print processed_record
 end
