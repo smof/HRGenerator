@@ -9,27 +9,33 @@ require 'date'
 require 'csv'
 
 #Globals and constants#######################################################################
-INPUT_FILE="names.dat" #one name per line (firstname lastname)
-OUTPUT_FILE="HR_generated_data.csv"
+INPUT_FILE="100k_names.dat" #one name per line (firstname lastname)
+OUTPUT_FILE="100k_HR_Users.csv"
 @unique_employeeids = [] #initialized.  contains newly created ids in order to manage uniqueness
 @managers = {} #where manager to dept assignments are stored
 @completed_users = [] #where all user arrays end up
 
 #Org Data
-COMPANY_NAME="Acme"
+COMPANY_NAME="OpenRock"
 
-DEPTS=["IT","Finance","Sales","Engineering","Accounts","Marketing","Operations_Centre","Research", "Consulting"]
+DEPTS=["IT","Finance","Sales","Engineering","Accounts","Marketing","Operations","Research", "Consulting", "Admin", "Partner",
+	"HR","Logistics", "Communications", "Facilities"]
 
-TITLES={:IT => ["Developer","Analyst","Engineer"], :Finance=>["Administrator","Payroll-Clerk","Reporting"], :Sales=>["Rep","Field-Rep"], 
-  :Engineering=>["Engineer","Snr-Engineer"], :Accounts=>["Payable-Clerk","Receivable-Clerk"], :Marketing=>["Inbound-Exec","Outbound-Exec"],
-  :Operations_Centre=>["Analyst1","Analyst2","Analyst3"], :Research=>["Assistant","Supervisor"], :Consulting=>["Consultant","Snr-Consultant"] }
+TITLES={:IT => ["Developer-I","Developer-II","Developer-III","Analyst","Engineer", "Snr-Engineer"], 
+  :Finance=>["Administrator-III","Administrator-II","Administrator-I","Payroll-Clerk","Reporting"], 
+  :Sales=>["Rep-I","Rep-II","Rep-III","Field-Rep-I","Field-Rep-II","Field-Rep-III"], 
+  :Engineering=>["Engineer","Snr-Engineer"], :Accounts=>["Payable-Clerk-I","Receivable-Clerk","Payable-Clerk-II","Payable-Clerk-III"], 
+  :Marketing=>["Inbound-Exec-II","Inbound-Exec-I","Outbound-Exec-I","Outbound-Exec-II"],:Operations=>["Analyst1","Analyst2","Analyst3"],
+  :Research=>["Assistant","Supervisor"], :Consulting=>["Consultant","Snr-Consultant"], :Admin=>["Receptionist","Secretary"], 
+  :Partner=>["Relations-Manager"], :HR=>["Exec-III","Exec-II","Exec-I"], :Logistics=>["Analyst-I", "Analyst-II"],
+  :"Communications"=>["Exec","Consultant", "Writer-Internal", "Writer-External"], :Facilities=>["Security-I", "Security-II", "Guard"] }
 
 #Globals and constants#######################################################################
 
 
 def init
   
-  @completed_users << "employeeid,fullname,firstname,lastname,email,department,job_title,manager,start_date"
+  @completed_users << "employeeid,fullname,firstname,lastname,email,department,job_title,manager,start_date,mobile,location"
   
 end
 
@@ -72,6 +78,38 @@ def read_employees
   
 end
 
+#returns n digit number block
+def get_number_block
+
+	block = rand(4**4)
+	#make sure block length is 3 chars
+
+	while block.to_s.length != 3
+		block = rand(4**4)
+	end
+
+	return block
+end
+
+#generates phone number
+def get_phone
+	
+	#Eg 123-456-789
+	number="#{get_number_block}-#{get_number_block}-#{get_number_block}"
+end
+
+#generates continent based location
+def get_continent
+
+	continents = ["US", "EU", "ASIA"]
+	continent = continents[Kernel.rand(continents.length-1)]	
+	
+end
+
+
+
+
+
 #Creates single HR record with random data and pushes into COMPLETED_USERS array
 def create_HR_record employee
         
@@ -87,8 +125,10 @@ def create_HR_record employee
     start_date = get_start_date
     end_date = get_end_date #not implemented
     manager = job_title == "Manager" ? "CEO" : @managers[dept.to_sym]
-    
-    @completed_users << "#{employeeid},#{fullname},#{firstname},#{lastname},#{email},#{dept},#{job_title},#{manager},#{start_date}"
+    mobile = get_phone
+    location = get_continent
+
+    @completed_users << "#{employeeid},#{fullname},#{firstname},#{lastname},#{email},#{dept},#{job_title},#{manager},#{start_date},#{mobile},#{location}"
    
     STDERR.print processed_record
 end
